@@ -1,0 +1,6 @@
+FROM node:14.3.0
+MAINTAINER Makhee Kwon fzl7808777@gmail.com
+RUN mkdir -p /app
+WORKDIR /app
+EXPOSE 3000
+ENTRYPOINT cd /app/backend && npm install && npm run dev

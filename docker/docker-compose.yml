@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  node:
+    container_name: makhee_node
+    build:
+      context: ./node/
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ${MOUNT_VOLUME}:/app/
+    ports:
+      - '3000:3000'

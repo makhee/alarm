@@ -2,7 +2,7 @@
   <div class="wrap">
     <h1>5월 마지막주 영화 예매 순위</h1>
     <ul class="movies">
-      <li v-for="movie in movies" class="item">
+      <li v-for="movie in movies" v-bind:key="movie.id" class="item">
         <span class="rank">{{movie.id}}</span>
         <router-link :to="{ name: 'show', params: { id: movie.id }}">
           <img v-bind:src="movie.poster" class="poster">

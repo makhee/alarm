@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 module.exports = {
     FCM_PUBLIC_KEY: process.env.FCM_PUBLIC_KEY,
     FCM_PRIVATE_KEY: process.env.FCM_PRIVATE_KEY,

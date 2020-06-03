@@ -7,7 +7,15 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const pushRouter = require('./routes/push');
 const subscribeRouter = require('./routes/subscribe');
-const keys_cfg = require('./conf/keys');
+
+const models = require('./models');
+
+models.sequelize.sync().then( () => {
+  console.log(" DB 연결 성공");
+}).catch(err => {
+  console.log("연결 실패");
+  console.log(err);
+})
 
 const app = express();
 

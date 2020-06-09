@@ -1,6 +1,10 @@
 const routes = require('express').Router();
-const apis = require('./apis');
+const api = require('./api');
+const auth = require('./auth');
+const js = require('./js');
 
-routes.use('/', apis);
+routes.use('/api', api);
+routes.use('/auth', auth);
+routes.use('/js', js);
 
 module.exports = routes;

@@ -6,14 +6,14 @@ const logger = require('morgan');
 const router = require('./routes');
 const history = require('connect-history-api-fallback');
 
-// const models = require('./models');
+const models = require('./models');
 
-// models.sequelize.sync().then(() => {
-//   console.log('DB 연결 성공');
-// }).catch(err => {
-//   console.log('연결 실패');
-//   console.log(err);
-// })
+models.sequelize.sync().then(() => {
+  console.log('DB 연결 성공');
+}).catch(err => {
+  console.log('연결 실패');
+  console.log(err);
+})
 
 const app = express();
 app.use(history())

@@ -22,7 +22,7 @@
 'use strict';
 
 /* eslint-disable max-len */
-const applicationServerPublicKey = 'BNGcQ3CMYI7GWapuczqiJGGoaAxEuPaYDTbD9lr7zGXAH5ga6YrwzcTOx-hV9FOJTYkCDXG270crq_tTEZ2--BQ';
+const applicationServerPublicKey = 'BP0f8poM7BcVZq10b0hddOF6VkltrbUBAjF6ydWLseQoKbFxW3wJ-u1IkZelCrz9gwLyQTVyuYYeV9qQxLLY6hU';
 
 /* eslint-enable max-len */
 
@@ -47,7 +47,7 @@ self.addEventListener('push', function (event) {
 
   const title = 'Push Codelab';
   const options = {
-    body: 'Yay it works.'
+    body: event.data.text()
   };
 
   const notificationPromise = self.registration.showNotification(title, options);

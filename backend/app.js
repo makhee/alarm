@@ -5,17 +5,11 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const router = require('./routes');
 const history = require('connect-history-api-fallback');
-
-const models = require('./models');
-
-models.sequelize.sync().then(() => {
-  console.log('DB 연결 성공');
-}).catch(err => {
-  console.log('연결 실패');
-  console.log(err);
-})
+const sequelize = require('./models').sequelize;
 
 const app = express();
+
+sequelize.sync();
 app.use(history())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -76,8 +76,8 @@ export default {
       if (Notification.permission === "denied") {
         this.pushButton.textContent = "Push Messaging Blocked.";
         this.pushButton.disabled = true;
-        this.subscriptionJson = null;
         this.updateSubscriptionOnServer();
+        this.subscriptionJson = null;
         return;
       }
 
@@ -102,10 +102,10 @@ export default {
           console.log("Error unsubscribing", error);
         })
         .then(() => {
-          this.subscriptionJson = null;
-          this.updateSubscriptionOnServer();
-          console.log("User is unsubscribed.");
           this.isSubscribed = false;
+          this.updateSubscriptionOnServer();
+          this.subscriptionJson = null;
+          console.log("User is unsubscribed.");
           this.updateBtn();
         });
     },
@@ -114,7 +114,7 @@ export default {
       const subscriptionJson = document.querySelector(".js-subscription-json");
       const subscriptionDetails = document.querySelector(".js-subscription-details");
 
-      if (this.subscriptionJson) {
+      if (this.isSubscribed) {
         subscriptionJson.textContent = `response code : ${JSON.stringify(this.subscriptionJson)}`;
         subscriptionDetails.classList.remove("is-invisible");
 
@@ -152,7 +152,7 @@ export default {
       this.swRegistration.pushManager.getSubscription().then(subscription => {
         this.isSubscribed = !(subscription === null);
         this.subscriptionJson = subscription;
-        this.updateSubscriptionOnServer();
+        // this.updateSubscriptionOnServer();
         if (this.isSubscribed) {
           console.log("User IS subscribed.");
         } else {
@@ -174,8 +174,8 @@ export default {
         .then(subscription => {
           console.log("User is subscribed.");
           this.subscriptionJson = subscription;
-          this.updateSubscriptionOnServer();
           this.isSubscribed = true;
+          this.updateSubscriptionOnServer();
           this.updateBtn();
         })
         .catch(err => {

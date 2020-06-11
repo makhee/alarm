@@ -1,27 +1,46 @@
-require('dotenv').config();
+const config = require('../../../config');
 const webPush = require('web-push');
+const { SUBSCRIPTION_TB } = require('../../../models');
 
 class WebPush {
-    constructor() {}
+    constructor() { }
 
     setVapid() {
         webPush.setVapidDetails(
             'mailto:fzl7808777@gmail.com',
-            process.env.WEB_PUSH_PUBLIC_KEY,
-            process.env.WEB_PUSH_PRIVATE_KEY
+            config.FCM_PUBLIC_KEY,
+            config.FCM_PRIVATE_KEY
         );
     }
 
-    subscription(endpoint) {
-        // const store = await Store.create({ name: "Joe's corner store", address: { address1: "123 test street", city: "Los Angeles", state: "CA" } })
-        console.log(endpoint);
+    subscription(endpoint_json) {
+        SUBSCRIPTION_TB.findAll({
+            where: { auth: endpoint_json.keys.auth }
+        })
+        .then((res) => {
+            if (res.length == 0) {
+                SUBSCRIPTION_TB.create({
+                    auth: endpoint_json.keys.auth,
+                    endpoint: endpoint_json
+                });
+            }
+        });
     }
 
-    unsubscription(endpoint) {
-        console.log(endpoint);
+    unsubscription(endpoint_json) {
+        SUBSCRIPTION_TB.findAll({
+            where: { auth: endpoint_json.keys.auth }
+        })
+        .then((res) => {
+            if (res.length > 0) {
+                SUBSCRIPTION_TB.destroy({
+                    where: { auth: endpoint_json.keys.auth }
+                });
+            }
+        });
     }
 
-    send(endpoint, payload) {      
+    send(endpoint, payload) {
         this.setVapid();
         webPush.sendNotification(endpoint, payload).catch((err) => {
             if (err.statusCode === 410) {

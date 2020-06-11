@@ -1,16 +1,13 @@
-require('dotenv').config();
-var passport = require('passport');
-var NaverStrategy = require('passport-naver').Strategy;
+const config = require('../../config');
+const passport = require('passport');
+const NaverStrategy = require('passport-naver').Strategy;
 
 passport.use(new NaverStrategy({
-        clientID: process.env.NAVER_AUTH_CLIENT_ID,
-        clientSecret: process.env.NAVER_AUTH_CLIENT_SECRET_KEY,
+        clientID: config.NAVER_AUTH_CLIENT_ID,
+        clientSecret: config.NAVER_AUTH_CLIENT_SECRET_KEY,
         callbackURL: ''
     },
     (accessToken, refreshToken, profile, done) => {
-        console.log('@@@@@@@@@@@');
-        console.log(profile);
-        console.log('@@@@@@@@@@@');
         User.findOne({
             'naver.id': profile.id
         }, (err, user) => {
@@ -32,3 +29,5 @@ passport.use(new NaverStrategy({
         });
     }
 ));
+
+// 추가예정..

@@ -26,7 +26,7 @@ const applicationServerPublicKey = 'BP0f8poM7BcVZq10b0hddOF6VkltrbUBAjF6ydWLseQo
 
 /* eslint-enable max-len */
 
-function urlB64ToUint8Array(base64String) {
+const urlB64ToUint8Array = (base64String) => {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
     .replace(/\-/g, '+')
@@ -41,40 +41,37 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-self.addEventListener('push', function (event) {
-  console.log('[Service Worker] Push Received.');
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
-  const title = 'Push Codelab';
-  const options = {
-    body: event.data.text()
-  };
-
-  const notificationPromise = self.registration.showNotification(title, options);
+self.addEventListener('push', (event) => {
+  const title = '엑스투소프트 교육알림이';
+  const notificationPromise = self.registration.showNotification(title, JSON.parse(event.data.text()));
   event.waitUntil(notificationPromise);
 });
 
-self.addEventListener('notificationclick', function (event) {
-  console.log('[Service Worker] Notification click Received.');
+self.addEventListener('notificationclick', (event) => {
+  let action = event.action;
+  let data = event.notification.data;
 
   event.notification.close();
 
-  event.waitUntil(
-    clients.openWindow('https://developers.google.com/web/')
-  );
+  if (action === 'site') {
+    event.waitUntil(
+      // TODO: 임시로 로컬 사이트로 이동
+      clients.openWindow(data.url)
+    );
+  }
 });
 
-self.addEventListener('pushsubscriptionchange', function (event) {
-  console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
-  const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-  event.waitUntil(
-    self.registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: applicationServerKey
-    })
-      .then(function (newSubscription) {
-        // TODO: Send to application server
-        console.log('[Service Worker] New subscription: ', newSubscription);
-      })
-  );
-});
+// self.addEventListener('pushsubscriptionchange', (event) => {
+//   console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
+//   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+//   event.waitUntil(
+//     self.registration.pushManager.subscribe({
+//       userVisibleOnly: true,
+//       applicationServerKey: applicationServerKey
+//     })
+//       .then(function (newSubscription) {
+//         // TODO: Send to application server
+//         console.log('[Service Worker] New subscription: ', newSubscription);
+//       })
+//   );
+// });

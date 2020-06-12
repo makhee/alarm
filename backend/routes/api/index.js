@@ -6,18 +6,29 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/subscribe', (req, res) => {
-    apiController.webPush.subscription(req.body.endpoint);
-    console.log('subscribe');
+    if (req.body.endpoint) {
+        apiController.webPush.subscription(req.body.endpoint);
+    }
+
+    res.status(200);
 });
 
-router.put('/subscribe', (req, res) => {
-    apiController.webPush.unsubscription(req.body.endpoint);
-    console.log('unsubscribe');
+router.delete('/subscribe', (req, res) => {
+    if (req.body.endpoint) {
+        apiController.webPush.unsubscription(req.body.endpoint);
+    }
+
+    res.status(200);
 });
 
 router.post('/sendpush', (req, res) => {
-    apiController.webPush.send(req.body.endpoint, 'payload');
-    console.log('sendpush');
+    if (req.body.endpoint) {
+        apiController.webPush.getTemplate(req.body.endpoint.keys.auth, (template) => {
+            apiController.webPush.send(req.body.endpoint, template);
+        });
+    }
+
+    res.status(200);
 });
 
 module.exports = router;

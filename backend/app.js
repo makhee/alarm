@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const router = require('./routes');
 const history = require('connect-history-api-fallback');
-const sequelize = require('./models').sequelize;
+const sequelize = require('./database/models').sequelize;
 
 const app = express();
 

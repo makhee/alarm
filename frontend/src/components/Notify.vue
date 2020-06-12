@@ -112,10 +112,14 @@ export default {
 
     updateSubscriptionOnServer() {
       const subscriptionJson = document.querySelector(".js-subscription-json");
-      const subscriptionDetails = document.querySelector(".js-subscription-details");
+      const subscriptionDetails = document.querySelector(
+        ".js-subscription-details"
+      );
 
       if (this.isSubscribed) {
-        subscriptionJson.textContent = `response code : ${JSON.stringify(this.subscriptionJson)}`;
+        subscriptionJson.textContent = `response code : ${JSON.stringify(
+          this.subscriptionJson
+        )}`;
         subscriptionDetails.classList.remove("is-invisible");
 
         this.$http.post("/api/subscribe", {
@@ -125,8 +129,10 @@ export default {
         subscriptionJson.textContent = "";
         subscriptionDetails.classList.add("is-invisible");
 
-        this.$http.put("/api/subscribe", {
-          endpoint: this.subscriptionJson
+        this.$http.delete("/api/subscribe", {
+          data: {
+            endpoint: this.subscriptionJson
+          }
         });
       }
     },
@@ -144,15 +150,17 @@ export default {
 
       this.sendButton = document.querySelector(".js-send-btn");
       this.sendButton.addEventListener("click", () => {
-        this.$http.post("/api/sendpush", {
-          endpoint: this.subscriptionJson
-        });
+        if (this.subscriptionJson) {
+          this.$http.post("/api/sendpush", {
+            endpoint: this.subscriptionJson
+          });
+        }
       });
 
       this.swRegistration.pushManager.getSubscription().then(subscription => {
         this.isSubscribed = !(subscription === null);
         this.subscriptionJson = subscription;
-        // this.updateSubscriptionOnServer();
+        this.updateSubscriptionOnServer();
         if (this.isSubscribed) {
           console.log("User IS subscribed.");
         } else {

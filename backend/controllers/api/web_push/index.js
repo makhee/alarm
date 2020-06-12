@@ -1,6 +1,6 @@
 const config = require('../../../config');
 const webPush = require('web-push');
-const { SUBSCRIPTION_TB } = require('../../../models');
+const { SUBSCRIPTION_TB, TEMPLATE_TB } = require('../../../database/models');
 
 class WebPush {
     constructor() { }
@@ -14,29 +14,24 @@ class WebPush {
     }
 
     subscription(endpoint_json) {
-        SUBSCRIPTION_TB.findAll({
-            where: { auth: endpoint_json.keys.auth }
-        })
-        .then((res) => {
-            if (res.length == 0) {
-                SUBSCRIPTION_TB.create({
-                    auth: endpoint_json.keys.auth,
-                    endpoint: endpoint_json
-                });
-            }
+        SUBSCRIPTION_TB.findOrCreate({
+            where: { auth: endpoint_json.keys.auth },
+            defaults: { endpoint: endpoint_json}
         });
     }
 
     unsubscription(endpoint_json) {
-        SUBSCRIPTION_TB.findAll({
+        SUBSCRIPTION_TB.destroy({
             where: { auth: endpoint_json.keys.auth }
+        });
+    }
+
+    getTemplate(auth_key, cb) {
+        TEMPLATE_TB.findOne({
+            where: { id: 2}
         })
         .then((res) => {
-            if (res.length > 0) {
-                SUBSCRIPTION_TB.destroy({
-                    where: { auth: endpoint_json.keys.auth }
-                });
-            }
+            cb(res.dataValues.template);
         });
     }
 

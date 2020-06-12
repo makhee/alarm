@@ -9,7 +9,7 @@ const sequelize = require('./database/models').sequelize;
 
 const app = express();
 
-sequelize.sync();
+sequelize.sync().then();
 app.use(history())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
